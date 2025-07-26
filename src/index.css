@@ -8,39 +8,39 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Custom color palette based on requirements */
-    --cream: 33 100% 94%; /* rgb(255, 242, 224) */
-    --lavender: 228 67% 84%; /* rgb(192, 201, 238) */
-    --periwinkle: 233 50% 75%; /* rgb(162, 170, 219) */
-    --slate-blue: 236 32% 65%; /* rgb(137, 138, 196) */
+    /* Custom color palette */
+    --light-gray: 0 0% 97%; /* rgb(247, 247, 247) */
+    --orange: 38 100% 59%; /* rgb(255, 178, 44) */
+    --brown: 14 30% 37%; /* rgb(133, 72, 54) */
+    --black: 0 0% 0%; /* rgb(0, 0, 0) */
 
-    --background: var(--cream);
-    --foreground: 236 32% 25%;
+    --background: var(--light-gray);
+    --foreground: var(--black);
 
     --card: 0 0% 100%;
-    --card-foreground: 236 32% 25%;
+    --card-foreground: var(--black);
 
     --popover: 0 0% 100%;
-    --popover-foreground: 236 32% 25%;
+    --popover-foreground: var(--black);
 
-    --primary: var(--slate-blue);
-    --primary-foreground: 0 0% 100%;
+    --primary: var(--orange);
+    --primary-foreground: var(--black);
 
-    --secondary: var(--lavender);
-    --secondary-foreground: 236 32% 25%;
+    --secondary: var(--brown);
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: var(--periwinkle);
-    --muted-foreground: 236 20% 45%;
+    --muted: var(--light-gray);
+    --muted-foreground: var(--brown);
 
-    --accent: var(--periwinkle);
-    --accent-foreground: 236 32% 25%;
+    --accent: var(--orange);
+    --accent-foreground: var(--black);
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 228 40% 88%;
-    --input: 228 40% 90%;
-    --ring: var(--slate-blue);
+    --border: var(--brown);
+    --input: 0 0% 95%;
+    --ring: var(--orange);
 
     --radius: 0.5rem;
 
