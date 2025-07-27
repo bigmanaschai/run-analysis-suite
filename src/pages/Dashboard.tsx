@@ -6,7 +6,8 @@ import { StatsCard } from "@/components/Dashboard/StatsCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Timer, Zap, Target, TrendingUp, Download, FileSpreadsheet } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Timer, Zap, Target, TrendingUp, Download, FileSpreadsheet, Play } from "lucide-react";
 
 interface DashboardProps {
   userRole: 'admin' | 'coach' | 'runner';
@@ -30,6 +31,8 @@ const videoRanges = [
 
 export const Dashboard = ({ userRole, onLogout }: DashboardProps) => {
   const [uploadedVideos, setUploadedVideos] = useState<Record<string, boolean>>({});
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
   const handleVideoUpload = (range: string, file: File) => {
     console.log(`Uploading video for ${range}:`, file.name);
@@ -39,6 +42,15 @@ export const Dashboard = ({ userRole, onLogout }: DashboardProps) => {
   const handleExportReport = () => {
     console.log("Exporting performance report to Excel");
     // This would trigger the Excel export functionality
+  };
+
+  const handleAnalysis = () => {
+    setIsAnalyzing(true);
+    // Simulate analysis process
+    setTimeout(() => {
+      setIsAnalyzing(false);
+      setShowResults(true);
+    }, 3000);
   };
 
   const maxVelocity = Math.max(...samplePerformanceData.map(d => d.velocity));
@@ -97,8 +109,96 @@ export const Dashboard = ({ userRole, onLogout }: DashboardProps) => {
                     />
                   ))}
                 </div>
+                
+                <div className="mt-6 flex justify-center">
+                  <Button 
+                    onClick={handleAnalysis} 
+                    disabled={isAnalyzing || Object.keys(uploadedVideos).length === 0}
+                    className="flex items-center gap-2"
+                  >
+                    <Play className="w-4 h-4" />
+                    {isAnalyzing ? "Analyzing..." : "Start Analysis"}
+                  </Button>
+                </div>
               </CardContent>
             </Card>
+
+            {/* Analysis Progress */}
+            {isAnalyzing && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Analysis in Progress</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <Progress value={66} className="w-full" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Processing video data and calculating performance metrics...
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Running Progress and Performance Metrics */}
+            {showResults && !isAnalyzing && (
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Running Progress and Performance Metrics</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {/* Performance Stats */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                      <StatsCard
+                        title="Max Velocity"
+                        value={maxVelocity.toFixed(3)}
+                        unit="m/s"
+                        icon={Zap}
+                        description="Peak speed achieved"
+                      />
+                      <StatsCard
+                        title="Avg Velocity"
+                        value={avgVelocity.toFixed(3)}
+                        unit="m/s"
+                        icon={TrendingUp}
+                        description="Average speed"
+                      />
+                      <StatsCard
+                        title="Total Distance"
+                        value={totalDistance.toFixed(1)}
+                        unit="m"
+                        icon={Target}
+                        description="Distance covered"
+                      />
+                      <StatsCard
+                        title="Analysis Time"
+                        value="0.400"
+                        unit="s"
+                        icon={Timer}
+                        description="Total analysis duration"
+                      />
+                    </div>
+
+                    {/* Performance Charts */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                      <PerformanceChart
+                        data={samplePerformanceData}
+                        title="Position vs Time"
+                        type="line"
+                        dataKey="position"
+                      />
+                      <PerformanceChart
+                        data={samplePerformanceData}
+                        title="Velocity vs Time"
+                        type="bar"
+                        dataKey="velocity"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="analysis" className="space-y-6">
